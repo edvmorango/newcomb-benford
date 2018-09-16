@@ -15,7 +15,6 @@ data Prefix
   | P7
   | P8
   | P9
-  | P0
   deriving (Eq, Show)
 
 data Item = Item
@@ -30,10 +29,15 @@ data ItemGroup
               Integer
   deriving (Eq, Show)
 
+-- Tag Groups ElementsTotal
 data Batch = Batch
+  { groups :: [ItemGroup]
+  , total :: Integer
+  } deriving (Eq, Show)
+
+data BatchC = BatchC
   { btag :: Tag
-  , groups :: [ItemGroup]
-  , btotal :: Integer
+  , batch :: Batch
   } deriving (Eq, Show)
 
 instance Semigroup ItemGroup where
@@ -43,4 +47,14 @@ instance Semigroup ItemGroup where
 
 instance Monoid ItemGroup where
   mempty = EmptyGroup
-  mappend i i' = i <> i'
+  mappend = (<>)
+
+mergeItemGroups :: [ItemGroup] -> [ItemGroup] -> [ItemGroup]
+mergeItemGroups a b = map (\(a, b) -> a <> b) (zip a b)
+
+instance Semigroup Batch where
+  (Batch g t) <> (Batch g' t') = Batch (mergeItemGroups g g') (t + t')
+
+instance Monoid Batch where
+  mempty = Batch [] 0
+  mappend = (<>)
