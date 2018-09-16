@@ -1,0 +1,73 @@
+-- This file has been generated from package.yaml by hpack version 0.28.2.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: b7415510118287348a32f8019aee7ffe836888c3895b925945c5c5775a93b6f9
+
+name:           newcomb-benford
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/githubuser/newcomb-benford#readme>
+homepage:       https://github.com/githubuser/newcomb-benford#readme
+bug-reports:    https://github.com/githubuser/newcomb-benford/issues
+author:         Author name here
+maintainer:     example@example.com
+copyright:      2018 Author name here
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+cabal-version:  >= 1.10
+extra-source-files:
+    ChangeLog.md
+    README.md
+
+source-repository head
+  type: git
+  location: https://github.com/githubuser/newcomb-benford
+
+library
+  exposed-modules:
+      Lib
+  other-modules:
+      Paths_newcomb_benford
+  hs-source-dirs:
+      src
+  build-depends:
+      base >=4.7 && <5
+    , hspec
+    , HUnit-approx
+    , aeson
+    , servant-server
+    , wai
+    , warp
+  default-language: Haskell2010
+
+executable newcomb-benford-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_newcomb_benford
+  hs-source-dirs:
+      app
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , newcomb-benford
+  default-language: Haskell2010
+
+test-suite newcomb-benford-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_newcomb_benford
+  hs-source-dirs:
+      test
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , newcomb-benford
+    , hspec
+    , HUnit-approx
+    , servant-api
+    , hspec-wai
+    , hspec-wai-json
+    , aeson
+  default-language: Haskell2010
