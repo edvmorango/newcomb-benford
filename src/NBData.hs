@@ -1,5 +1,9 @@
+{-# LANGUAGE TemplateHaskell #-}
+
 module NBData where
 
+import Data.Aeson
+import Data.Aeson.TH
 import Data.Char (digitToInt)
 import Data.Monoid
 import Data.Semigroup
@@ -23,6 +27,8 @@ data Item = Item
   { tag :: Tag
   , code :: Integer
   } deriving (Eq, Show)
+
+$(deriveJSON defaultOptions ''Item)
 
 data ItemGroup
   = EmptyGroup
