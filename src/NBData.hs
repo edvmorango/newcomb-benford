@@ -4,7 +4,7 @@ module NBData where
 
 import Data.Aeson
 import Data.Aeson.TH
-import Data.Char (digitToInt)
+import Data.Char (digitToInt, isDigit)
 import Data.Monoid
 import Data.Semigroup
 
@@ -70,13 +70,19 @@ instance Monoid Batch where
   mempty = EmptyBatch
   mappend = (<>)
 
-getAlgarism :: Integer -> Int
-getAlgarism = (digitToInt . head . show)
+getAlgarism :: Integer -> Either String Int
+getAlgarism n =
+  if (id)
+    then (Right (digitToInt fc))
+    else (Left ("`" ++ [fc] ++ "` is a invalid input."))
+  where
+    fc = (head . show) n
+    id = isDigit fc
 
 getPrefix :: Integer -> Prefix
 getPrefix i =
   case (getAlgarism i) of
-    0 -> P0
+    _ -> P0
     1 -> P1
     2 -> P2
     3 -> P3
@@ -92,8 +98,11 @@ mkItemGroup i = ItemGroup p [i] 1
   where
     p = (getPrefix . code) i
 
-mkBatch :: Item -> Batch
-mkBatch i = Batch igs 1
+mkBatch :: Item -> Either String Batch
+mkBatch i = case alg of
+	      Left e -> Left e
+       	      Right alg -> 
+	Batch igs 1
   where
     alg = (getAlgarism . code) i
     ig = mkItemGroup i
