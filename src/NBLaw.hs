@@ -5,7 +5,7 @@ clog = logBase 10
 logNumberMk :: Int -> Float
 logNumberMk a = 1 + 1 / (fromIntegral a)
 
-algarismLaw :: Int -> Float
+algarismLaw :: Int -> Maybe Float
 algarismLaw v
-  | v > 0 && v < 10 = (clog . logNumberMk) v
-  | otherwise = 0
+  | v > 0 && v < 10 = Just $ (clog . logNumberMk) v
+  | otherwise = Nothing
