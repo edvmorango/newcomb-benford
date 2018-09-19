@@ -10,18 +10,6 @@ import Data.Semigroup
 
 type Tag = String
 
-data Prefix
-  = P1
-  | P2
-  | P3
-  | P4
-  | P5
-  | P6
-  | P7
-  | P8
-  | P9
-  | P0
-  deriving (Eq, Show)
 
 data Item = Item
   { tag :: Tag
@@ -30,19 +18,25 @@ data Item = Item
 
 $(deriveJSON defaultOptions ''Item)
 
+
+-- ItemGroup  Int :: Algarism(for a while) 
+--  	      [Item] :: Items list
+--  	      Integer :: Length of [Item]
 data ItemGroup
   = EmptyGroup
-  | ItemGroup Prefix
+  | ItemGroup Int
               [Item]
               Integer
   deriving (Eq, Show)
 
--- Tag Groups ElementsTotal
+-- Batch [ItemGroup] :: Item Groups list
+-- 	 Integer :: Amount of items contained into item groups
 data Batch
   = EmptyBatch
   | Batch [ItemGroup]
           Integer
   deriving (Eq, Show)
+
 
 data BatchC = BatchC
   { btag :: Tag
