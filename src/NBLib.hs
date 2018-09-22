@@ -76,3 +76,10 @@ prepareGroups is = (mk . sort . fdr) is
     mk = mkBatchGroups 1
     sort = sortBy (\(a, _) (b, _) -> compare a b)
     fdr = foldr (\c acc -> (prefix c) ++ acc) []
+
+mkNBBatch :: Tag -> [Item] -> NBBatch
+mkNBBatch t is = Batch t len igs
+  where
+    filtered = filter (\i -> (tag i) == t) is
+    igs = prepareGroups filtered
+    len = foldr (\(ItemGroup _ l _) acc -> acc + l) 0 igs
