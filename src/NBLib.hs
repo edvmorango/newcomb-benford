@@ -3,6 +3,8 @@
 
 module NBLib where
 
+import Data.Aeson
+import Data.Aeson.TH
 import Data.Char
 import Data.List
 import Data.Maybe
@@ -15,6 +17,8 @@ data Item = Item
   { tag :: String
   , code :: Integer
   } deriving (Eq, Show)
+
+$(deriveJSON defaultOptions ''Item)
 
 data ItemGroup a b c where
   ItemGroup :: Integer -> Integer -> [Item] -> ItemGroup Integer Integer [Item] -- Prefix (Items Lenght) Items
@@ -77,7 +81,7 @@ prepareGroups is = (mk . sort . fdr) is
     sort = sortBy (\(a, _) (b, _) -> compare a b)
     fdr = foldr (\c acc -> (prefix c) ++ acc) []
 
-mkNBBatch :: Tag -> [Item] -> NBBatch
+--mkNBBatch :: Tag -> [Item] -> NBBatch
 mkNBBatch t is = Batch t len igs
   where
     filtered = filter (\i -> (tag i) == t) is
