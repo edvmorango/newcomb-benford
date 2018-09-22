@@ -58,27 +58,21 @@ getPrefix n
   | n <= 0 = Nothing
   | otherwise = Just ((toInteger . digitToInt . head . show) n)
 
--- gb :: [Item] -> [[Item]]
--- gb :: [Item] -> [(Integer, Item)]
-adjustGroup :: Integer -> [[Item]] -> [[Item]] -> [[Item]]
-adjustGroup 0 acc _ = acc
-adjustGroup i acc m@(hm:tm) =
-  if (dec hm) == (10 - i)
-    then inc (acc ++ [hm]) tm
-    else inc (acc ++ [[]]) m
+-- taker :: Int -> Int -> [(Integer, Item)] -> [[Item]]  
+mkBatchGroups :: Integer -> [(Integer, Item)] -> [NBItemGroup]
+mkBatchGroups 10 _ = []
+mkBatchGroups i v = (mkNBItemGroup i items) : mkBatchGroups (i + 1) t
   where
-    dec :: [Item] -> Integer
-    dec [] = 0
-    dec (h:_) = (fromJust . getPrefix . code) h
-    inc = adjustGroup (i - 1)
+    (c, t) = span (\(a, _) -> a == i) v
+    items = fmap (\(_, b) -> b) c
 
-gb its = ((adjustGroup 9 [[]]) . mp . grp . sort . fdr) its
+prepareGroups :: [Item] -> [NBItemGroup]
+prepareGroups is = (mk . sort . fdr) is
   where
     prefix i =
       case (getPrefix (code i)) of
         Just p -> [(p, i)]
         _ -> []
-    mp = (fmap . fmap) (\(_, e) -> e)
-    grp = groupBy (\(a, _) (b, _) -> (==) a b)
+    mk = mkBatchGroups 1
     sort = sortBy (\(a, _) (b, _) -> compare a b)
     fdr = foldr (\c acc -> (prefix c) ++ acc) []
