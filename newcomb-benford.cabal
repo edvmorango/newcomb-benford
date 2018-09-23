@@ -41,6 +41,7 @@ library
     , warp
     , cassava
     , vector
+    , bytestring
   default-language: Haskell2010
 
 executable newcomb-benford-exe
@@ -74,4 +75,5 @@ test-suite newcomb-benford-test
     , aeson
     , cassava
     , vector
+    , bytestring
   default-language: Haskell2010
