@@ -7,6 +7,19 @@ itemA = Item "a" 1
 
 itemA2 = Item "a" 2
 
+itemGroupA :: [NBItemGroup]
+itemGroupA =
+  [ ItemGroup 1 2 [itemA, itemA]
+  , ItemGroup 2 0 []
+  , ItemGroup 3 0 []
+  , ItemGroup 4 0 []
+  , ItemGroup 5 0 []
+  , ItemGroup 6 0 []
+  , ItemGroup 7 0 []
+  , ItemGroup 8 0 []
+  , ItemGroup 9 0 []
+  ]
+
 nbListTest :: IO ()
 nbListTest =
   hspec $ do
@@ -22,3 +35,6 @@ nbListTest =
             (ItemGroup 1 2 [itemA, itemA])
         it "Should create a empty ItemGroup" $ do
           (mkNBItemGroup 1 []) `shouldBe` (ItemGroup 1 0 [])
+      describe "mkBatchGroups" $ do
+        it "Should return a Batch group" $ do
+          (mkBatchGroups 1 [(1, itemA), (1, itemA)]) `shouldBe` itemGroupA
