@@ -6,6 +6,8 @@ module CSVMain where
 
 import Control.Exception
 import qualified Data.ByteString.Lazy as BL
+import qualified Data.ByteString.Lazy.Char8 as C8
+import Data.Char
 import Data.Csv
 import qualified Data.Vector as V
 import NBLib
@@ -36,6 +38,10 @@ csvMain = do
   orders <-
     case ordersV of
       Left s -> throwIO $ CSVException s
-      Right (_, v) -> return $ ((fmap (round . amount)) . V.toList) v
+      Right (tagname, v) ->
+        let tag = (C8.unpack . C8.fromStrict . V.head) tagname
+            convert = round . amount
+            tr = fmap (\e -> Item tag (convert e)) . V.toList
+         in return $ (tag, tr v)
   return $ orders
-  --putStrLn $ show (length orders)
+--putStrLn $ fst orders
