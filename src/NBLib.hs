@@ -1,4 +1,5 @@
 {-# LANGUAGE GADTs #-}
+{-# LANGUAGE StandaloneDeriving #-}
 {-# LANGUAGE TemplateHaskell #-}
 
 module NBLib where
@@ -23,10 +24,14 @@ $(deriveJSON defaultOptions ''Item)
 data ItemGroup a b c where
   ItemGroup :: Integer -> Integer -> [Item] -> ItemGroup Integer Integer [Item] -- Prefix (Items Lenght) Items
 
+deriving instance Eq (ItemGroup a b c)
+
 type NBItemGroup = ItemGroup Integer Integer [Item]
 
 data Batch a b c where
   Batch :: Tag -> Integer -> [NBItemGroup] -> Batch Tag Integer [NBItemGroup]
+
+deriving instance Eq (Batch a b c)
 
 type NBBatch = Batch Tag Integer [NBItemGroup]
 
