@@ -9,16 +9,12 @@ itemA2 = Item "a" 2
 
 itemGroupA :: [NBItemGroup]
 itemGroupA =
-  [ ItemGroup 1 2 [itemA, itemA]
-  , ItemGroup 2 0 []
-  , ItemGroup 3 0 []
-  , ItemGroup 4 0 []
-  , ItemGroup 5 0 []
-  , ItemGroup 6 0 []
-  , ItemGroup 7 0 []
-  , ItemGroup 8 0 []
-  , ItemGroup 9 0 []
-  ]
+  ItemGroup 1 2 [itemA, itemA] : fmap (\i -> ItemGroup i 0 []) [2 .. 9]
+
+itemGroupA12 :: [NBItemGroup]
+itemGroupA12 =
+  [ItemGroup 1 2 [itemA, itemA], ItemGroup 2 1 [itemA2]] ++
+  (fmap (\i -> ItemGroup i 0 []) [3 .. 9])
 
 nbListTest :: IO ()
 nbListTest =
@@ -36,5 +32,13 @@ nbListTest =
         it "Should create a empty ItemGroup" $ do
           (mkNBItemGroup 1 []) `shouldBe` (ItemGroup 1 0 [])
       describe "mkBatchGroups" $ do
-        it "Should return a Batch group" $ do
+        it "Should return a Batch group A1" $ do
           (mkBatchGroups 1 [(1, itemA), (1, itemA)]) `shouldBe` itemGroupA
+        it "Should return a Batch group A1,A2" $ do
+          (mkBatchGroups 1 [(1, itemA), (1, itemA), (2, itemA2)]) `shouldBe`
+            itemGroupA12
+      describe "prepareGroups" $ do
+        it "Should return the respective groups A1" $ do
+          prepareGroups [itemA, itemA] `shouldBe` itemGroupA1
+        it "Should return the respective groups A1,A2" $ do
+          prepareGroups [itemA, itemA, itemA2] `shouldBe` itemGroupA12
