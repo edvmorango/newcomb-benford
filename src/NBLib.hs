@@ -4,6 +4,7 @@
 
 module NBLib where
 
+import ChiSquared
 import Data.Aeson
 import Data.Aeson.TH
 import Data.Char
@@ -11,6 +12,7 @@ import Data.List
 import Data.Maybe
 import Data.Monoid
 import Data.Semigroup
+import NBLaw
 
 type Tag = String
 
@@ -91,3 +93,22 @@ mkNBBatch t is = Batch t len igs
     filtered = filter (\i -> (tag i) == t) is
     igs = prepareGroups filtered
     len = foldr (\(ItemGroup _ l _) acc -> acc + l) 0 igs
+  --frequency [(ef, fromIntegral len)]
+  --where
+    --law = algarismLaw pref
+    --ef = fromJust $ fmap (fromIntegral . round . (* (fromIntegral tlen))) law
+
+-- groupChiSquare :: Integer -> NBItemGroup -> (Float, Float)
+-- groupChiSquare tlen (ItemGroup pref len items) =
+--batchChiSquare :: NBBatch -> (Float, Float)
+batchPoints :: NBBatch -> [(Float, Float)]
+batchPoints (Batch _ len igs) = mapped
+  where
+    mapped =
+      fmap
+        (\(ItemGroup p l _) ->
+           let ef =
+                 fromIntegral . round $
+                 (fromIntegral len) * (algarismLawUnsafe p)
+            in (ef, fromIntegral l))
+        igs
