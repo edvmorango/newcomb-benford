@@ -35,7 +35,7 @@ instance Exception CSVException
 -- csvMain :: IO ()
 csvMain = do
   ordersV <- csvReader
-  orders <-
+  (tag, items) <-
     case ordersV of
       Left s -> throwIO $ CSVException s
       Right (tagname, v) ->
@@ -43,5 +43,4 @@ csvMain = do
             convert = round . amount
             tr = fmap (\e -> Item tag (convert e)) . V.toList
          in return $ (tag, tr v)
-  return $ orders
---putStrLn $ fst orders
+  return $ mkNBBatch tag items

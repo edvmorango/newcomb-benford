@@ -38,8 +38,7 @@ type NBBatch = Batch Tag Integer [NBItemGroup]
 ------ ItemGroup Instances
 instance Show (ItemGroup a b c) where
   show (ItemGroup a b c) =
-    "ItemGroup -> Prefix [" ++
-    (show a) ++ "] Items Length [" ++ (show b) ++ "] Items " ++ (show c)
+    "ItemGroup -> Prefix [" ++ (show a) ++ "] Items Length [" ++ (show b) ++ "]"
 
 instance Semigroup (ItemGroup a b c) where
   (ItemGroup p l is) <> (ItemGroup _ l' is') = ItemGroup p (l + l') (is ++ is')
