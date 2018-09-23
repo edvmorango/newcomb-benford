@@ -39,6 +39,7 @@ library
     , servant-server
     , wai
     , warp
+    , cassava
   default-language: Haskell2010
 
 executable newcomb-benford-exe
@@ -70,4 +71,5 @@ test-suite newcomb-benford-test
     , hspec-wai
     , hspec-wai-json
     , aeson
+    , cassava
   default-language: Haskell2010
