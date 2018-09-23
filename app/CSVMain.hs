@@ -4,6 +4,7 @@
 
 module CSVMain where
 
+import Charts
 import Control.Exception
 import qualified Data.ByteString.Lazy as BL
 import qualified Data.ByteString.Lazy.Char8 as C8
@@ -43,4 +44,6 @@ csvMain = do
             convert = round . amount
             tr = fmap (\e -> Item tag (convert e)) . V.toList
          in return $ (tag, tr v)
-  return $ mkNBBatch tag items
+  points <- return $ batchPoints $ mkNBBatch tag items
+  let ps = fmap (\(a, b) -> [realToFrac a, realToFrac b]) points
+   in genChart "Orders" ps
