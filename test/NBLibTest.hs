@@ -16,6 +16,10 @@ itemGroupA12 =
   [ItemGroup 1 2 [itemA, itemA], ItemGroup 2 1 [itemA2]] ++
   (fmap (\i -> ItemGroup i 0 []) [3 .. 9])
 
+batchA = Batch "a" 2 itemGroupA
+
+batchA12 = Batch "a" 3 itemGroupA12
+
 nbListTest :: IO ()
 nbListTest =
   hspec $ do
@@ -39,6 +43,11 @@ nbListTest =
             itemGroupA12
       describe "prepareGroups" $ do
         it "Should return the respective groups A1" $ do
-          prepareGroups [itemA, itemA] `shouldBe` itemGroupA1
+          prepareGroups [itemA, itemA] `shouldBe` itemGroupA
         it "Should return the respective groups A1,A2" $ do
           prepareGroups [itemA, itemA, itemA2] `shouldBe` itemGroupA12
+      describe "mkNBBatch" $ do
+        it "Should create a new NBBatch" $ do
+          mkNBBatch "a" [itemA, itemA] `shouldBe` batchA
+        it "Should create a new NBBatch A1, A12" $ do
+          mkNBBatch "a" [itemA, itemA, itemA2] `shouldBe` batchA12
